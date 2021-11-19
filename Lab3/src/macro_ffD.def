@@ -1,0 +1,19 @@
+`define MACRO_FFD(clock, myedge="negedge", reset, d_in, d_out)\
+generate case(``myedge)\
+   "posedge": begin: gen_ff_rst_pos\
+      always_ff@(posedge ``clock or posedge ``reset) begin: ff_rst_pos\
+      if (``reset)\
+         ``d_out<= '0;\
+	else\
+	 ``d_out <= ``d_in;\
+      end\
+   end\
+   "negedge": begin: gen_ff_rst_neg\
+      always_ff@(posedge ``clock, negedge ``reset) begin: ff_rst_neg\
+      if (!``reset)\
+            ``d_out <= '0;\
+	 else\
+	    ``d_out <= ``d_in;\
+      end\
+   end\
+endcase endgenerate

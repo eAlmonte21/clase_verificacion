@@ -1,52 +1,38 @@
 `timescale 1ns/1ps;
 
-module tb_ffD(d, clock, data_out, reset);
+module tb_ffD();
 
-parameter WORD_LENGTH = 4;
+logic d_in;
+logic d_out;
+bit clock, reset;
+logic gold;
 
-input logic [WORD_LENGTH-1:0] d;
-input logic clock, reset;
-output logic [WORD_LENGTH-1:0] data_out;
+flipflopD TEST (.d_in(d_in), .clock(clock), .d_out(d_out), .reset(reset));
 
-macro_ffD #(WORD_LENGTH) DUT (.d(d), .clock(clock), .data_out(data_out), .reset(reset));
-
-initial begin 
-	
-	clock = 0;		
-	forever #10 clock = ~clock;
-	
+always begin
+#8 clock = 1'b0;
+#8 clock = 1'b1;
 end
 
 
-
 initial begin 
- reset=0;
- d = 4'b0101;
- if(reset)
-	data_out = 0;
- else
-	data_out <= d;
- #100
- reset = 0;
- d = 4'b0001;
- if(reset)
-	data_out = 0;
- else
-	data_out <= d;
- #100
- reset = 1;
- d = 4'b0011;
- if(!reset)
-	data_out = 0;
- else
-	data_out <= d;
- #100
- reset = 0;
- d = 4'b0001;
- if(!reset)
-	data_out = 0;
- else
-	data_out <= d;
+ reset <= 0;
+ d_in = 1'b1;
+ clock <= 0;
+ gold <= 1'b0;
+ 
+#15 reset <= 1;
+#20 d_in <= 1'b1; gold <= d_in;
+#15 reset <= 0;
+#20 d_in <= 1'b0; gold <= d_in;
+#15 reset <= 0;
+#20 d_in <= 1'b1; gold <= d_in;
+#15 reset <= 1;
+#20 d_in <= 1'b1; gold <= d_in;
+#15 reset <= 1;
+#20 d_in <= 1'b1; gold <= d_in;
+#15 reset <= 0;
+#20 d_in <= 1'b0; gold <= d_in;
 end
 
 endmodule 		

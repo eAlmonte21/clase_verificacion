@@ -1,0 +1,22 @@
+`define ST_macro(f_n = 0, sev_task = "Info")\
+generate case (``sev_task)\
+	"fatal": begin\
+	if(f_n == 0)\
+		$fatal("Fatal Message 0", f_n);\
+	else if(f_n == 1)\
+		$fatal("Fatal Message 1", f_n);\
+	else if(f_n == 2)\
+		$fatal("Fatal Message 2", f_n);\
+	end\
+	"Info": begin\
+	$info("Info Message");\
+	end\
+	"Error": begin\
+	$error("ERROR Message");\
+	end\
+	"Warning": begin\
+	$warning("WARNING Message");\
+	end\
+endcase endgenerate
+
+
